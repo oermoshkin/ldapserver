@@ -2,6 +2,7 @@ package ldapserver
 
 import (
 	"bufio"
+	"context"
 	"net"
 	"sync"
 	"time"
@@ -11,6 +12,7 @@ import (
 
 type client struct {
 	Numero      int
+	Context     context.Context
 	srv         *Server
 	rwc         net.Conn
 	br          *bufio.Reader

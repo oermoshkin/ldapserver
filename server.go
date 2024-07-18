@@ -2,6 +2,7 @@ package ldapserver
 
 import (
 	"bufio"
+	"context"
 	"net"
 	"sync"
 	"time"
@@ -24,7 +25,7 @@ type Server struct {
 	Handler Handler
 }
 
-//NewServer return a LDAP Server
+// NewServer return a LDAP Server
 func NewServer() *Server {
 	return &Server{
 		chDone: make(chan bool),
@@ -117,10 +118,11 @@ func (s *Server) serve() error {
 // client has a writer and reader buffer
 func (s *Server) newClient(rwc net.Conn) (c *client, err error) {
 	c = &client{
-		srv: s,
-		rwc: rwc,
-		br:  bufio.NewReader(rwc),
-		bw:  bufio.NewWriter(rwc),
+		Context: context.Background(),
+		srv:     s,
+		rwc:     rwc,
+		br:      bufio.NewReader(rwc),
+		bw:      bufio.NewWriter(rwc),
 	}
 	return c, nil
 }
